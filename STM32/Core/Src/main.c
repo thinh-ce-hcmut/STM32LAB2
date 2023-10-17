@@ -195,7 +195,7 @@ HAL_TIM_Base_Start_IT(&htim2);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 setTimer0(100);
-
+setTimer1(25);
 int index = 0;
 
  while (1) {
@@ -217,11 +217,18 @@ int index = 0;
 			  setTimer0(100);
 
  }
+ if(timer1_flag == 1){
+	 if(index>=4)index=0;
 
+	 setTimer1(25);
+	 	update7SEG(index++);
+
+	 }
+ }
 
  }
   /* USER CODE END 3 */
-}
+
 
 /**
   * @brief System Clock Configuration
@@ -346,18 +353,12 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-int counter1 =25;
-int index = 0;
+
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 {
 timerRun0();
-if(index>=4)index=0;
-counter1--;
-if(counter1<=0){
-	counter1=25;
-	update7SEG(index++);
+timerRun1();
 
-}
 
 }
 /* USER CODE END 4 */
