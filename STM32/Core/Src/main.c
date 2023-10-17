@@ -274,6 +274,7 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 int counter1 = 50;
+int counter2 = 100;
 enum state {
 seg1,
 seg2,
@@ -285,6 +286,11 @@ enum state current = seg1;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 {
 	counter1--;
+	counter2--;
+	if(counter2<=0){
+		counter2=100;
+		HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
+	}
 	if(counter1 <=0){
 		counter1 = 50;
 
@@ -303,6 +309,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 			HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
 			HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
 			display7SEG(2);
+
 			current = seg3;
 			break;
 		case seg3:
