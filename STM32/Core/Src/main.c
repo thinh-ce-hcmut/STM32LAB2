@@ -184,7 +184,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter1 = 10;
+int counter1 = 50;
 enum state {
 	seg1,
 	seg2,
@@ -211,7 +211,7 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 	default:
 		break;
 	}
-	counter1 = 10;
+	counter1 = 50;
 }
 }
 /* USER CODE END 4 */
