@@ -105,6 +105,52 @@ else {
      	HAL_GPIO_WritePin(GPIOB, a_Pin | b_Pin| c_Pin |d_Pin |  f_Pin|g_Pin, RESET);
 }
 }
+const int MAX_LED = 4;
+ int index_led = 0;
+ int led_buffer [4] = {1 , 2 , 3 , 4};
+void update7SEG (int index) {
+ switch (index) {
+ case 0:
+ 		  HAL_GPIO_WritePin(GPIOA, EN0_Pin, RESET);
+ 		  HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
+ 		  HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
+ 		  HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
+ 		  display7SEG(led_buffer[0]);
+
+ 		  break;
+
+ 	  case 1:
+ 	  		  HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
+ 	  		  HAL_GPIO_WritePin(GPIOA, EN1_Pin, RESET);
+ 			  HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
+ 			  HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
+ 	  		  display7SEG(led_buffer[1]);
+
+ 	  		  break;
+
+
+ 	  case 2:
+ 	  		  HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
+ 	  		  HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
+ 			  HAL_GPIO_WritePin(GPIOA, EN2_Pin, RESET);
+ 			  HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
+ 	  		  display7SEG(led_buffer[2]);
+
+ 	  		  break;
+
+ 	  case 3:
+ 	  		  HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
+ 	  		  HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
+ 			  HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
+ 			  HAL_GPIO_WritePin(GPIOA, EN3_Pin, RESET);
+ 	  		  display7SEG(led_buffer[3]);
+
+ 	  		  break;
+ 	  	  default:
+ 		  break;
+ }
+ }
+
 /* USER CODE END 0 */
 
 /**
@@ -273,67 +319,16 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter1 = 50;
-int counter2 = 100;
-enum state {
-seg1,
-seg2,
-seg3,
-seg4,
-};
-
-enum state current = seg1;
+int index = 0;
+int counter = 100;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 {
-	counter1--;
-	counter2--;
-	if(counter2<=0){
-		counter2=100;
-		HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
-	}
-	if(counter1 <=0){
-		counter1 = 50;
-
-	switch(current){
-		case seg1:
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin, RESET);
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
-			display7SEG(1);
-			current = seg2;
-			break;
-		case seg2:
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin, RESET);
-			HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
-			display7SEG(2);
-
-			current = seg3;
-			break;
-		case seg3:
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN2_Pin, RESET);
-			HAL_GPIO_WritePin(GPIOA, EN3_Pin, SET);
-			display7SEG(3);
-			current = seg4;
-			break;
-		case seg4:
-			HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN2_Pin, SET);
-			HAL_GPIO_WritePin(GPIOA, EN3_Pin, RESET);
-			display7SEG(0);
-			current = seg1;
-
-			break;
-		default:
-			break;
+		if(index>=4)index=0;
+		counter--;
+		if(counter<=0){
+			counter = 100;
+			update7SEG(index++);
 		}
-
-	}
 }
 /* USER CODE END 4 */
 
