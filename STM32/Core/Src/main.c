@@ -19,7 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-
+#include "software_timer.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -195,24 +195,13 @@ HAL_TIM_Base_Start_IT(&htim2);
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  while (1)
-  {
-    /* USER CODE END WHILE */
-	  second ++;if ( second >= 60) {
-		   second = 0;
-		   minute ++;
-		   }
-		   if( minute >= 60) {
-		   minute = 0;
-		   hour ++;
-		   }
-		   if( hour >=24) {
-		   hour = 0;
-		   }
-		   updateClockBuffer () ;
-		   HAL_Delay (1000) ;
-    /* USER CODE BEGIN 3 */
-  }
+setTimer0 (10) ;
+ while (1) {
+ if( timer0_flag == 1) {
+ HAL_GPIO_TogglePin ( LED_RED_GPIO_Port , LED_RED_Pin ) ;
+ setTimer0 (2000) ;
+ }
+ }
   /* USER CODE END 3 */
 }
 
@@ -344,7 +333,7 @@ int counter2 = 25;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 {
-
+timerRun0();
 	counter1--;
 	counter2--;
 	if(index>=4)index=0;
