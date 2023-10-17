@@ -53,7 +53,57 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void display7SEG(int num){
 
+
+if(num == 0){
+
+     	HAL_GPIO_WritePin(GPIOB, g_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB,a_Pin | b_Pin| c_Pin |d_Pin | e_Pin | f_Pin,RESET);
+}
+else if (num == 1){
+     	HAL_GPIO_WritePin(GPIOB, g_Pin| a_Pin |d_Pin|e_Pin|f_Pin , SET);
+     	HAL_GPIO_WritePin(GPIOB,  b_Pin| c_Pin, RESET);
+}
+else if (num == 2){
+
+     	HAL_GPIO_WritePin(GPIOB, c_Pin | f_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB, a_Pin | b_Pin|d_Pin | e_Pin | g_Pin, RESET);
+}
+else if (num == 3){
+
+     	HAL_GPIO_WritePin(GPIOB, e_Pin | f_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB, a_Pin | b_Pin| c_Pin |d_Pin | g_Pin, RESET);
+}
+else if (num == 4){
+
+     	HAL_GPIO_WritePin(GPIOB, a_Pin | d_Pin| e_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB,  b_Pin| c_Pin | f_Pin|g_Pin, RESET);
+}
+else if (num == 5){
+
+     	HAL_GPIO_WritePin(GPIOB, b_Pin | e_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB, a_Pin |  c_Pin |d_Pin | f_Pin|g_Pin, RESET);
+}
+else if (num == 6){
+
+     	HAL_GPIO_WritePin(GPIOB, b_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB, a_Pin |  c_Pin |d_Pin | e_Pin | f_Pin|g_Pin, RESET);
+}
+else if (num == 7){
+	HAL_GPIO_WritePin(GPIOB, g_Pin |d_Pin | e_Pin | f_Pin, SET);
+	HAL_GPIO_WritePin(GPIOB, a_Pin | b_Pin| c_Pin , RESET);
+}
+else if (num == 8){
+	HAL_GPIO_WritePin(GPIOB, a_Pin | b_Pin| c_Pin |d_Pin | e_Pin | f_Pin|g_Pin, RESET);
+
+}
+else {
+
+     	HAL_GPIO_WritePin(GPIOB, e_Pin, SET);
+     	HAL_GPIO_WritePin(GPIOB, a_Pin | b_Pin| c_Pin |d_Pin |  f_Pin|g_Pin, RESET);
+}
+}
 /* USER CODE END 0 */
 
 /**
@@ -84,7 +134,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -134,7 +184,36 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+int counter1 = 10;
+enum state {
+	seg1,
+	seg2,
+};
 
+enum state current = seg1;
+void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
+{	counter1--;
+	if(counter1<=0){
+	switch(current){
+	case seg1:
+		HAL_GPIO_WritePin(GPIOA, EN0_Pin, RESET);
+		HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
+		display7SEG(1);
+		current = seg2;
+		break;
+	case seg2:
+			HAL_GPIO_WritePin(GPIOA, EN1_Pin, RESET);
+			HAL_GPIO_WritePin(GPIOA, EN0_Pin, SET);
+			display7SEG(2);
+			current = seg1;
+
+			break;
+	default:
+		break;
+	}
+	counter1 = 10;
+}
+}
 /* USER CODE END 4 */
 
 /**
