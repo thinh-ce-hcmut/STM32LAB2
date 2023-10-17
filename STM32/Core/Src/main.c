@@ -253,7 +253,7 @@ static void MX_TIM2_Init(void)
   htim2.Instance = TIM2;
   htim2.Init.Prescaler = 7999;
   htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim2.Init.Period = 999;
+  htim2.Init.Period = 9;
   htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
@@ -320,15 +320,24 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 int index = 0;
+int counter1 = 100;
+int counter2 = 25;
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 {
 
-
+	counter1--;
+	counter2--;
 	if(index>=4)index=0;
-			update7SEG(index++);
+	if(counter2<=0){
+		counter2=25;
 
+			update7SEG(index++);}
+
+if(counter1<=0){
+	counter1=100;
 		HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
+}
 }
 /* USER CODE END 4 */
 
