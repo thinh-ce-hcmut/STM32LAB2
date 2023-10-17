@@ -137,7 +137,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-HAL_TIM_Base_Start(&htim2);
+HAL_TIM_Base_Start_IT(&htim2);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -273,7 +273,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-int counter1 = 100;
+int counter1 = 50;
 enum state {
 seg1,
 seg2,
@@ -282,11 +282,13 @@ seg4,
 };
 
 enum state current = seg1;
-void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef * htim )
 {
 	counter1--;
 	if(counter1 <=0){
-		switch(current){
+		counter1 = 50;
+
+	switch(current){
 		case seg1:
 			HAL_GPIO_WritePin(GPIOA, EN0_Pin, RESET);
 			HAL_GPIO_WritePin(GPIOA, EN1_Pin, SET);
@@ -323,7 +325,7 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 		default:
 			break;
 		}
-		counter1 = 100;
+
 	}
 }
 /* USER CODE END 4 */
